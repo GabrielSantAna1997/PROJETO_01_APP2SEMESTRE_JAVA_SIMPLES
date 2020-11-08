@@ -1,4 +1,5 @@
 # ProjetoAPP_2Semestre
 
-### Aplicativo Gif
+
+![Aplicativo](ezgif.com-gif-maker.gif)
 

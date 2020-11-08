@@ -1,5 +1,5 @@
 # ProjetoAPP_2Semestre
 
 
-![Aplicativo](ezgif.com-gif-maker.gif)
+![Aplicativo](20201108_201336.gif)
 

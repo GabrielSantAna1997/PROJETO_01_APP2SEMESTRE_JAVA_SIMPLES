@@ -92,7 +92,7 @@ public class QuestionActivity extends AppCompatActivity implements View.OnClickL
     {
 
 
-        countDown = new CountDownTimer(30000,100) {
+        countDown = new CountDownTimer(30900,100) {
             @Override
             public void onTick(long millisUntilFinished) {
 
@@ -249,7 +249,7 @@ public class QuestionActivity extends AppCompatActivity implements View.OnClickL
                                 }
 
                                 if(viewNumb != 0)
-                                    ((Button)view).setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#304352")));
+                                    ((Button)view).setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#1CB5E0")));
 
 
 

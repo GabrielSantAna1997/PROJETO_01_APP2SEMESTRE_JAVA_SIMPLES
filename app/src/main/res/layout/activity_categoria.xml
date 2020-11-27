@@ -4,73 +4,78 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CategoriaActivity"
-    android:background="@drawable/gradiente_blackground">
+    android:background="@drawable/gradiente_blackground"
+    android:padding="16dp"
+    tools:context=".CategoriaActivity">
 
-    <Button
-        android:id="@+id/buttonDevenvolvimento"
-        android:layout_width="313dp"
-        android:layout_height="85dp"
-        android:layout_marginStart="49dp"
-        android:layout_marginTop="374dp"
-        android:layout_marginEnd="49dp"
-        android:text="Desenvolvimento"
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="246dp"
+        android:layout_height="75dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/buttonRedes"
-        android:layout_width="313dp"
-        android:layout_height="85dp"
-        android:layout_marginStart="49dp"
-        android:layout_marginTop="26dp"
-        android:layout_marginEnd="49dp"
-        android:text="Redes"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonDevenvolvimento" />
-
-    <Button
-        android:id="@+id/buttonS"
-        android:layout_width="313dp"
-        android:layout_height="85dp"
-        android:layout_marginStart="49dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="49dp"
-        android:text="Segurança da Informação"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonRedes" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/tela" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="69dp"
-        android:layout_marginTop="296dp"
-        android:layout_marginEnd="54dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="sans-serif-light"
         android:includeFontPadding="false"
         android:text="CATEGORIAS"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textSize="30dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.428"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="246dp"
-        android:layout_height="224dp"
-        android:layout_marginStart="82dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="83dp"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
+        android:fillViewport="false"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/tela" />
+        app:layout_constraintTop_toBottomOf="@+id/textView">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:weightSum="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/buttonDevenvolvimento"
+                android:layout_width="313dp"
+                android:layout_height="75dp"
+                android:text="Desenvolvimento"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/buttonRedes"
+                android:layout_width="313dp"
+                android:layout_height="75dp"
+                android:text="Redes"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/buttonDevenvolvimento" />
+
+            <Button
+                android:id="@+id/buttonS"
+                android:layout_width="313dp"
+                android:layout_height="75dp"
+                android:text="Segurança da Informação"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/buttonRedes" />
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

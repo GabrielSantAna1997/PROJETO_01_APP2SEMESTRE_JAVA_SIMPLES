@@ -65,7 +65,7 @@
         app:layout_constraintTop_toBottomOf="@id/linearLayout">
 
         <LinearLayout
-            android:id="@+id/linearLayout3"
+            android:id="@+id/opcoesList"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginHorizontal="16dp"
@@ -77,64 +77,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout"
             app:layout_constraintVertical_bias="1.0">
-
-
-            <Button
-                android:id="@+id/opcao1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:background="@drawable/bgbtn"
-                android:backgroundTint="#1CB5E0"
-                android:elevation="3dp"
-                android:padding="16dp"
-                android:text="Opção 1"
-                android:textColor="#FFFFFF"
-                android:textSize="18dp"
-                android:textStyle="bold" />
-
-            <Button
-                android:id="@+id/opcao2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:background="@drawable/bgbtn"
-                android:backgroundTint="#1CB5E0"
-                android:elevation="3dp"
-                android:padding="16dp"
-                android:text="Opção 2"
-                android:textColor="#FFFFFF"
-                android:textSize="18dp"
-                android:textStyle="bold" />
-
-            <Button
-                android:id="@+id/opcao3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:background="@drawable/bgbtn"
-                android:backgroundTint="#1CB5E0"
-                android:elevation="3dp"
-                android:padding="16dp"
-                android:text="Opção 3"
-                android:textColor="#FFFFFF"
-                android:textSize="18dp"
-                android:textStyle="bold" />
-
-            <Button
-                android:id="@+id/opcao4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:background="@drawable/bgbtn"
-                android:backgroundTint="#1CB5E0"
-                android:elevation="3dp"
-                android:padding="16dp"
-                android:text="Opção 4"
-                android:textColor="#FFFFFF"
-                android:textSize="18dp"
-                android:textStyle="bold" />
-
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

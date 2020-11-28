@@ -38,7 +38,7 @@ public class CategoriaActivity extends AppCompatActivity {
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CategoriaActivity.this, QuestionActivity2.class);
+                Intent intent = new Intent(CategoriaActivity.this, QuestionActivity.class);
                 startActivity(intent);
 
             }
@@ -47,7 +47,7 @@ public class CategoriaActivity extends AppCompatActivity {
         button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CategoriaActivity.this, QuestionActivity3.class);
+                Intent intent = new Intent(CategoriaActivity.this, QuestionActivity.class);
                 startActivity(intent);
 
             }

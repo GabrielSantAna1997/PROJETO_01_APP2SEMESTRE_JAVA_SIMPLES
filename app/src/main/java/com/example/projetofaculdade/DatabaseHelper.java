@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 10;
+    private static final int DATABASE_VERSION = 11;
     private static final String DATABASE_NAME = "categoria.db";
 
     // Tables names
@@ -90,7 +90,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         long categoriaRedesId = this.insertCategoria("Redes", db);
         long categoriaSegurancaId = this.insertCategoria("Seguranca da Informação", db);
 
-        this.criarQuestoes(categoriaDesenvolvimentoid, db);
+        this.insertQuestoes(categoriaDesenvolvimentoid, this.getDesenvolvimentoQuestoes(), db);
     }
 
     @Override
@@ -103,10 +103,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         this.onCreate(db);
     }
 
-    private void criarQuestoes(long categoriaId, SQLiteDatabase database) {
-        List<Questao> questoes = new ArrayList<Questao>();
+    private List<Questao> getDesenvolvimentoQuestoes() {
+         List<Questao> questoes = new ArrayList<Questao>();
         List<QuestaoOpcao> opcoes = new ArrayList<QuestaoOpcao>();
         List<QuestaoOpcao> opcoes2 = new ArrayList<QuestaoOpcao>();
+        List<QuestaoOpcao> opcoes3 = new ArrayList<QuestaoOpcao>();
+        List<QuestaoOpcao> opcoes4 = new ArrayList<QuestaoOpcao>();
 
         opcoes.add(new QuestaoOpcao(1, 1, 1,"A) uma classe e tem o mesmo nome da classe.", false));
         opcoes.add(new QuestaoOpcao( 1, 1, 2, "B) um objeto e tem o mesmo nome do objeto.", false));
@@ -121,6 +123,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         opcoes2.add(new QuestaoOpcao(1, 1, 4, "D) abstract.", true));
         questoes.add(new Questao(2, "Na linguagem Java, um método que é apenas declarado como membro de uma classe, mas não provê uma implementação, deve ser declarado como:", opcoes2));
 
+        opcoes3.add(new QuestaoOpcao(1, 1, 1, "A) System.println(nomeA.compare(nomeB));", true));
+        opcoes3.add(new QuestaoOpcao(1, 1, 2, "B) System.out.println(nomeA.equals(nomeB));", false));
+        opcoes3.add(new QuestaoOpcao(1, 1, 3, "C) System.out(equals(nomeA, nomeB));", false));
+        opcoes3.add(new QuestaoOpcao(1, 1, 4, "D) System.out.print(equals(nomeA==nomeB));", false));
+        questoes.add(new Questao(3, "O comando da linguagem Java que exibe se a string nomeA é igual à string nomeB é:", opcoes3));
+
+        opcoes4.add(new QuestaoOpcao(1, 1, 1, "A) String x = (String) (b > c) ? \"true\" : \"false\"", false));
+        opcoes4.add(new QuestaoOpcao(1, 1, 2, "B) public static void main (String ... args){}", true));
+        opcoes4.add(new QuestaoOpcao(1, 1, 3, "C) final enum letra {A, B, C}", false));
+        opcoes4.add(new QuestaoOpcao(1, 1, 4, "D) Boolean bool = new Boolean()", false));
+        questoes.add(new Questao(4, "Dos trechos de códigos abaixo, extraídos de um arquivo fonte escrito para a versão 8 da linguagem Java, o único que compila corretamente é:", opcoes4));
+
+        return questoes;
+    }
+
+    private void insertQuestoes(long categoriaId, List<Questao> questoes, SQLiteDatabase database) {
         for (int index = 0; index < questoes.size(); index++) {
             ContentValues questaoValues = new ContentValues();
             Questao questaoAtual = questoes.get(index);

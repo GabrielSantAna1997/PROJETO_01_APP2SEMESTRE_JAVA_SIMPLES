@@ -106,6 +106,7 @@ public class QuestionActivity extends AppCompatActivity {
     {
         int numeroOpcaoCorreta = -1;
         Questao questaoAtual = this.questoes.get(this.questNumb);
+
         for (int index = 0; index < questaoAtual.opcoes.size(); index++) {
             QuestaoOpcao opcaoAtual = questaoAtual.opcoes.get(index);
 

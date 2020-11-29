@@ -1,7 +1,6 @@
 package com.example.projetofaculdade;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.res.ResourcesCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,30 +11,19 @@ public class MainActivity extends AppCompatActivity {
 
     private Button button;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
+        DatabaseHelper database = new DatabaseHelper(this.getApplicationContext());
 
         button = findViewById(R.id.button);
-
-
-
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, CategoriaActivity.class);
                 startActivity(intent);
-
             }
         });
-
-
-
         }
-
-
     }

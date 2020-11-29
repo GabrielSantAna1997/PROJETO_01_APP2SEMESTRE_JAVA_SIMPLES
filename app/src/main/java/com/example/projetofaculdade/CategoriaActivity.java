@@ -53,7 +53,7 @@ public class CategoriaActivity extends AppCompatActivity {
 
     private Button createButton(Categoria categoria) {
        Button button = new Button(this);
-       button.setId(categoria.id);
+       button.setTag(categoria.id);
        ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(313, 75);
        layoutParams.endToEnd = this.categoriasList.getId();
        layoutParams.startToStart = this.categoriasList.getId();

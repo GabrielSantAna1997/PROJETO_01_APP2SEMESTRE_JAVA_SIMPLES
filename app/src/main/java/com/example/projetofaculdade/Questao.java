@@ -5,11 +5,11 @@ import java.util.List;
 
 public class Questao {
 
-    int id;
+    long id;
     String nome;
-    QuestaoOpcao opcoes[];
+    List<QuestaoOpcao> opcoes;
 
-    public Questao(int id, String nome, QuestaoOpcao opcoes[]) {
+    public Questao(long id, String nome, List<QuestaoOpcao> opcoes) {
         this.id = id;
         this.nome = nome;
         this.opcoes = opcoes;

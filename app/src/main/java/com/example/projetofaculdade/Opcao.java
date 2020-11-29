@@ -1,10 +1,10 @@
 package com.example.projetofaculdade;
 
-public class Categoria {
+public class Opcao {
     long id;
     String nome;
 
-    Categoria(long id, String nome) {
+    Opcao(long id, String nome) {
         this.id = id;
         this.nome = nome;
     }

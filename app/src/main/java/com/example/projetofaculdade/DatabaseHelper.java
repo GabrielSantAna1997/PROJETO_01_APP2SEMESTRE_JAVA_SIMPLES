@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 10;
     private static final String DATABASE_NAME = "categoria.db";
 
     // Tables names
@@ -72,16 +72,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
              "FOREIGN KEY (" +  QUESTAO_OPCAO_OPCAO_ID + ") REFERENCES " +
             TABLE_OPCAO + " (" + OPCAO_ID + "))";
 
-    private static final String INSERT_CATEGORIA_DESENVOLVIMENTO = "INSERT INTO " + TABLE_CATEGORIA +
-            " (" + CATEGORIA_NOME +  ") " +
-            "VALUES (Desenvolvimento)";
-    private static final String INSERT_CATEGORIA_REDES = "INSERT INTO " + TABLE_CATEGORIA +
-            " (" + CATEGORIA_NOME +  ") " +
-            "VALUES (Redes)";
-    private static final String INSERT_CATEGORIA_SEGURANCA_INFORMACAO = "INSERT INTO " + TABLE_CATEGORIA +
-            " (" + CATEGORIA_NOME +  ") " +
-            "VALUES (Seguranca_da_Informacao)";
-
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -92,16 +82,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_CATEGORIA_TABLE);
         db.execSQL(CREATE_QUESTAO_TABLE);
-//        db.execSQL(CREATE_OPCAO_TABLE);
-//        db.execSQL(CREATE_QUESTAO_OPCAO_TABLE);
-        long categoriaDesenvolvimentoid =  this.insertCategoria("Desenvolvimento", db);
+        db.execSQL(CREATE_OPCAO_TABLE);
+        db.execSQL(CREATE_QUESTAO_OPCAO_TABLE);
+
+
+        long categoriaDesenvolvimentoid = this.insertCategoria("Desenvolvimento", db);
         long categoriaRedesId = this.insertCategoria("Redes", db);
         long categoriaSegurancaId = this.insertCategoria("Seguranca da Informação", db);
 
-
-        this.insertQuestao("Quanto é 2 + 2?", categoriaDesenvolvimentoid, db);
-//        db.execSQL(INSERT_CATEGORIA_REDES);
-//        db.execSQL(INSERT_CATEGORIA_SEGURANCA_INFORMACAO);
+        this.criarQuestoes(categoriaDesenvolvimentoid, db);
     }
 
     @Override
@@ -114,38 +103,146 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         this.onCreate(db);
     }
 
+    private void criarQuestoes(long categoriaId, SQLiteDatabase database) {
+        List<Questao> questoes = new ArrayList<Questao>();
+        List<QuestaoOpcao> opcoes = new ArrayList<QuestaoOpcao>();
+        List<QuestaoOpcao> opcoes2 = new ArrayList<QuestaoOpcao>();
+
+        opcoes.add(new QuestaoOpcao(1, 1, 1,"A) uma classe e tem o mesmo nome da classe.", false));
+        opcoes.add(new QuestaoOpcao( 1, 1, 2, "B) um objeto e tem o mesmo nome do objeto.", false));
+        opcoes.add(new QuestaoOpcao(1, 1, 3, "C) um objeto e tem o mesmo nome da classe a qual pertence.", true));
+        opcoes.add(new QuestaoOpcao(1, 1, 4, "D) uma classe e tem o nome diferente do nome da classe.", false));
+        questoes.add(new Questao(1, "Construtores Java são métodos especiais chamados pelo sistema no momento da criação de:", opcoes));
+
+
+        opcoes2.add(new QuestaoOpcao(1, 1, 1, "A) generic.", false));
+        opcoes2.add(new QuestaoOpcao(1, 1, 2, "B) void.", false));
+        opcoes2.add(new QuestaoOpcao(1, 1, 3, "C) initial.", false));
+        opcoes2.add(new QuestaoOpcao(1, 1, 4, "D) abstract.", true));
+        questoes.add(new Questao(2, "Na linguagem Java, um método que é apenas declarado como membro de uma classe, mas não provê uma implementação, deve ser declarado como:", opcoes2));
+
+        for (int index = 0; index < questoes.size(); index++) {
+            ContentValues questaoValues = new ContentValues();
+            Questao questaoAtual = questoes.get(index);
+
+            long questaoId = this.insertQuestao(questaoAtual.nome, categoriaId, database);
+
+            for (int opcaoIndex = 0; opcaoIndex < questaoAtual.opcoes.size(); opcaoIndex++) {
+                QuestaoOpcao questaoOpcaoAtual = questaoAtual.opcoes.get(opcaoIndex);
+
+                long opcaoId = this.insertOpcao(questaoOpcaoAtual.nome, database);
+                this.insertQuestaoOpcao(questaoOpcaoAtual, questaoId, opcaoId, database);
+            }
+        }
+    }
+
+
     private long insertCategoria(String nome, SQLiteDatabase database) {
         ContentValues values = new ContentValues();
 
         values.put(CATEGORIA_NOME, nome);
-        long categoriaId = database.insert(TABLE_CATEGORIA, null, values);
+        long id = database.insert(TABLE_CATEGORIA, null, values);
 
-        return  categoriaId;
+        return id;
     }
 
-    private void insertQuestao(String nome, long categoriaId, SQLiteDatabase database) {
+    private long insertQuestao(String nome, long categoriaId, SQLiteDatabase database) {
         ContentValues values = new ContentValues();
-
         values.put(QUESTAO_NOME, nome);
         values.put(QUESTAO_CATEGORIA_ID, categoriaId);
-         database.insert(TABLE_QUESTAO, null, values);
+        long id = database.insert(TABLE_QUESTAO, null, values);
+
+        return id;
+    }
+
+    private long insertOpcao(String nome, SQLiteDatabase database) {
+        ContentValues values = new ContentValues();
+        values.put(OPCAO_NOME, nome);
+        long id = database.insert(TABLE_OPCAO, null, values);
+
+        return id;
+    }
+
+    private void insertQuestaoOpcao(QuestaoOpcao questaoOpcao, long questaoId, long opcaoId, SQLiteDatabase database) {
+        ContentValues values = new ContentValues();
+        values.put(QUESTAO_OPCAO_QUESTAO_ID, questaoId);
+        values.put(QUESTAO_OPCAO_OPCAO_ID, opcaoId);
+        values.put(QUESTAO_OPCAO_CORRETA, questaoOpcao.isCorreta ? 1 : 0);
+        values.put(QUESTAO_OPCAO_NUMERO, questaoOpcao.numero);
+        database.insert(TABLE_QUESTAO_OPCAO, null, values);
     }
 
     public List<Categoria> getCategorias() {
-        String selectQuery  = "SELECT * FROM " + TABLE_CATEGORIA;
+        String query  = "SELECT * FROM " + TABLE_CATEGORIA;
         SQLiteDatabase database  = this.getReadableDatabase();
-        Cursor cursor = database.rawQuery(selectQuery, null);
+        Cursor cursor = database.rawQuery(query, null);
         List<Categoria> categorias = new ArrayList<Categoria>();
 
         if (cursor.moveToFirst()) {
             do {
-                int id =    cursor.getInt(cursor.getColumnIndex(CATEGORIA_ID));
+                long id = cursor.getLong(cursor.getColumnIndex(CATEGORIA_ID));
                 String nome = cursor.getString(cursor.getColumnIndex(CATEGORIA_NOME));
                 categorias.add(new Categoria(id, nome));
             } while (cursor.moveToNext());
         }
 
         return categorias;
+    }
+
+    public List<Questao> getQuestoes(long categoriaId) {
+        String query = "SELECT * FROM " + TABLE_QUESTAO +
+                " WHERE " + QUESTAO_CATEGORIA_ID + " = " + categoriaId;
+        SQLiteDatabase database = this.getReadableDatabase();
+        Cursor cursor = database.rawQuery(query, null);
+        List<Questao> questoes = new ArrayList<Questao>();
+
+        if (cursor.moveToFirst()) {
+            do {
+                long id = cursor.getLong(cursor.getColumnIndex(QUESTAO_ID));
+                String nome = cursor.getString(cursor.getColumnIndex(QUESTAO_NOME));
+                List<QuestaoOpcao> questoesOpcoes = this.getQuestaoOpcoes(id);
+
+                Questao questao = new Questao(id, nome, questoesOpcoes);
+                questoes.add(questao);
+            } while (cursor.moveToNext());
+        }
+
+        return questoes;
+    }
+
+    public Opcao getOpcao(long id) {
+        String query = "SELECT * FROM " + TABLE_OPCAO +
+                " WHERE " + OPCAO_ID + " = " + id;
+        SQLiteDatabase database = this.getReadableDatabase();
+        Cursor cursor = database.rawQuery(query, null);
+        cursor.moveToFirst();
+
+        String nome = cursor.getString(cursor.getColumnIndex(OPCAO_NOME));
+        Opcao opcao = new Opcao(id, nome);
+
+        return opcao;
+    }
+
+    public List<QuestaoOpcao> getQuestaoOpcoes(long questaoId) {
+        String query = "SELECT * FROM " + TABLE_QUESTAO_OPCAO +
+                " WHERE " +  QUESTAO_OPCAO_QUESTAO_ID + " = " + questaoId;
+        SQLiteDatabase database = this.getReadableDatabase();
+        Cursor cursor = database.rawQuery(query, null);
+        List<QuestaoOpcao> questaoOpcoes = new ArrayList<QuestaoOpcao>();
+
+        if (cursor.moveToFirst()) {
+            do {
+                long opcaoId = cursor.getLong(cursor.getColumnIndex(QUESTAO_OPCAO_OPCAO_ID));
+                boolean isCorreta = cursor.getInt(cursor.getColumnIndex(QUESTAO_OPCAO_CORRETA)) == 1 ? true : false;
+                int numero = cursor.getInt(cursor.getColumnIndex(QUESTAO_OPCAO_NUMERO));
+                String nome = this.getOpcao(opcaoId).nome;
+
+                QuestaoOpcao questaoOpcao = new QuestaoOpcao(questaoId, opcaoId, numero, nome, isCorreta);
+                questaoOpcoes.add(questaoOpcao);
+            } while (cursor.moveToNext());
+        }
+
+        return questaoOpcoes;
     }
 
     public Categoria getCategoriaByNome(String nome) {

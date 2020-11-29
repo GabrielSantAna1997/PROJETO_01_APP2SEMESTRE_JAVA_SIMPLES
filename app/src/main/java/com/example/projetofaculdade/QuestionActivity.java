@@ -14,11 +14,13 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.List;
+
 public class QuestionActivity extends AppCompatActivity {
 
     private TextView question, qCount, timer;
     private LinearLayout opcoesList;
-    private Questao[] questoes;
+    private List<Questao> questoes;
     private int questNumb = 0;
     private CountDownTimer countDown;
     private int score = 0;
@@ -26,45 +28,26 @@ public class QuestionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        DatabaseHelper databaseHelper = new DatabaseHelper(this.getApplicationContext());
         setContentView(R.layout.activity_question);
+        long categoriaId = getIntent().getLongExtra("categoriaId", 0);
 
         this.question = findViewById(R.id.question);
         this.qCount = findViewById(R.id.quest_numb);
         this.timer = findViewById(R.id.countdown);
         this.opcoesList = findViewById(R.id.opcoesList);
-        this.questoes = this.getQuestoes();
-
-        this.populateOpcoes(this.questoes[0].opcoes);
-        this.question.setText(this.questoes[0].nome);
+        this.questoes = databaseHelper.getQuestoes(categoriaId);
+        Questao primeiraQuestao = this.questoes.get(0);
+        this.populateOpcoes(primeiraQuestao.opcoes);
+        this.question.setText(primeiraQuestao.nome);
         timer.setText(String.valueOf(25));
-        qCount.setText(String.valueOf(1) + "/" + String.valueOf(this.questoes.length));
+        qCount.setText(String.valueOf(1) + "/" + String.valueOf(this.questoes.size()));
         starTimer();
     }
 
-    private Questao[] getQuestoes()
-    {
-        Questao[] questoes = new Questao[5];
-        QuestaoOpcao[] opcoes = new QuestaoOpcao[4];
-
-        opcoes[0] = new QuestaoOpcao(1, "A) uma classe e tem o mesmo nome da classe.", false);
-        opcoes[1] = new QuestaoOpcao( 2, "B) um objeto e tem o mesmo nome do objeto.", false);
-        opcoes[2] = new QuestaoOpcao(3, "C) um objeto e tem o mesmo nome da classe a qual pertence.", true);
-        opcoes[3] = new QuestaoOpcao(4, "D) uma classe e tem o nome diferente do nome da classe.", false);
-        questoes[0]  = new Questao(1, "Construtores Java são métodos especiais chamados pelo sistema no momento da criação de:", opcoes);
-
-
-        opcoes[0] = new QuestaoOpcao(1, "A) generic.", false);
-        opcoes[1] = new QuestaoOpcao(2, "B) void.", false);
-        opcoes[2] = new QuestaoOpcao(3, "C) initial.", false);
-        opcoes[3] = new QuestaoOpcao(4, "D) abstract.", true);
-        questoes[1] = new Questao(2, "Na linguagem Java, um método que é apenas declarado como membro de uma classe, mas não provê uma implementação, deve ser declarado como:", opcoes);
-
-        return questoes;
-    }
-
-    private void populateOpcoes(QuestaoOpcao[] opcoes) {
-        for (int index = 0; index < opcoes.length; index++) {
-            Button button = createOpcaoButton(opcoes[index]);
+    private void populateOpcoes(List<QuestaoOpcao> opcoes) {
+        for (int index = 0; index < opcoes.size(); index++) {
+            Button button = createOpcaoButton(opcoes.get(index));
             opcoesList.addView(button);
         }
     }
@@ -122,16 +105,17 @@ public class QuestionActivity extends AppCompatActivity {
     private void checkAnswer(View view)
     {
         int numeroOpcaoCorreta = -1;
-        Questao questaoAtual = this.questoes[this.questNumb];
-        for (int index = 0; index < questaoAtual.opcoes.length; index++) {
-            QuestaoOpcao opcaoAtual = questaoAtual.opcoes[index];
+        Questao questaoAtual = this.questoes.get(this.questNumb);
+        for (int index = 0; index < questaoAtual.opcoes.size(); index++) {
+            QuestaoOpcao opcaoAtual = questaoAtual.opcoes.get(index);
+
             if (opcaoAtual.isCorreta) {
                 numeroOpcaoCorreta = opcaoAtual.numero;
                 break;
             }
         }
 
-        if(numeroOpcaoCorreta == view.getId())
+        if(numeroOpcaoCorreta == (int) view.getTag())
         {
             //rigth Answer
 
@@ -154,14 +138,14 @@ public class QuestionActivity extends AppCompatActivity {
 
     private void changeQuestion()
     {
-        if(questNumb < this.questoes.length - 1)
+        if(questNumb < this.questoes.size() - 1)
         {
             questNumb++;
-            Questao questaoAtual = this.questoes[this.questNumb];
+            Questao questaoAtual = this.questoes.get(this.questNumb);
             this.question.setText(questaoAtual.nome);
 
-            for (int index = 0; index < questaoAtual.opcoes.length; index++) {
-                QuestaoOpcao opcaoAtual = questaoAtual.opcoes[index];
+            for (int index = 0; index < questaoAtual.opcoes.size(); index++) {
+                QuestaoOpcao opcaoAtual = questaoAtual.opcoes.get(index);
                 Button btnOpcao  = this.opcoesList.findViewWithTag(opcaoAtual.numero);
                 btnOpcao.setText(opcaoAtual.nome);
                 btnOpcao.setTag(opcaoAtual.numero);
@@ -169,7 +153,7 @@ public class QuestionActivity extends AppCompatActivity {
 
             }
 
-            qCount.setText(String.valueOf(questNumb+1) + "/" + String.valueOf(this.questoes.length));
+            qCount.setText(String.valueOf(questNumb+1) + "/" + String.valueOf(this.questoes.size()));
             timer.setText(String.valueOf(25));
             starTimer();
 
@@ -178,7 +162,7 @@ public class QuestionActivity extends AppCompatActivity {
         {
             //Go to Score Activity
             Intent intent = new Intent(QuestionActivity.this,ScoreActivity.class);
-            intent.putExtra("SCORE", String.valueOf(score) + "/" + String.valueOf(this.questoes.length));
+            intent.putExtra("SCORE", String.valueOf(score) + "/" + String.valueOf(this.questoes.size()));
             startActivity(intent);
             QuestionActivity.this.finish();
         }

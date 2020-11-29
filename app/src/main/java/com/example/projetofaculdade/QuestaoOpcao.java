@@ -1,14 +1,15 @@
 package com.example.projetofaculdade;
 
-abstract class Opcao {
-    int numero;
+public class QuestaoOpcao  {
+    long questaoId;
+    long opcaoId;
     String nome;
-}
-
-public class QuestaoOpcao extends Opcao{
+    int numero;
     boolean isCorreta;
 
-    QuestaoOpcao(int numero, String nome, boolean isCorreta) {
+    QuestaoOpcao(long questaoId, long opcaoId, int numero, String nome, boolean isCorreta) {
+        this.questaoId = questaoId;
+        this.opcaoId = opcaoId;
         this.numero = numero;
         this.nome = nome;
         this.isCorreta = isCorreta;

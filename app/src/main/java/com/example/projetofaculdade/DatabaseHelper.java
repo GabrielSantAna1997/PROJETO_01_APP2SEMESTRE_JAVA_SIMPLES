@@ -1,5 +1,6 @@
 package com.example.projetofaculdade;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 6;
     private static final String DATABASE_NAME = "categoria.db";
 
     // Tables names
@@ -50,14 +51,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // CREATE QUESTAO TABLE statement
     private static final String CREATE_QUESTAO_TABLE = "CREATE TABLE " +
-            TABLE_QUESTAO + " ("  + QUESTAO_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            TABLE_QUESTAO + " ("  + QUESTAO_ID + "  INTEGER PRIMARY KEY AUTOINCREMENT, " +
             QUESTAO_NOME + " TEXT, " +
             QUESTAO_CATEGORIA_ID + " INTEGER, " +
             "FOREIGN KEY(" + QUESTAO_CATEGORIA_ID + ") REFERENCES " + TABLE_CATEGORIA + " (" + CATEGORIA_ID + "))";
 
     // CREATE OPCAO TABLE statement
     private static final String CREATE_OPCAO_TABLE = "CREATE TABLE " +
-            TABLE_OPCAO + " (" + OPCAO_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+            TABLE_OPCAO + " (" + OPCAO_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             OPCAO_NOME + " TEXT" + ")";
 
     // CREATE QUESTAO_OPCAO TABLE statement
@@ -84,26 +85,50 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.getWritableDatabase();
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_CATEGORIA_TABLE);
         db.execSQL(CREATE_QUESTAO_TABLE);
-        db.execSQL(CREATE_OPCAO_TABLE);
-        db.execSQL(CREATE_QUESTAO_OPCAO_TABLE);
-        db.execSQL(INSERT_CATEGORIA_DESENVOLVIMENTO);
-        db.execSQL(INSERT_CATEGORIA_REDES);
-        db.execSQL(INSERT_CATEGORIA_SEGURANCA_INFORMACAO);
+//        db.execSQL(CREATE_OPCAO_TABLE);
+//        db.execSQL(CREATE_QUESTAO_OPCAO_TABLE);
+        long categoriaDesenvolvimentoid =  this.insertCategoria("Desenvolvimento", db);
+        long categoriaRedesId = this.insertCategoria("Redes", db);
+        long categoriaSegurancaId = this.insertCategoria("Seguranca da Informação", db);
+
+
+        this.insertQuestao("Quanto é 2 + 2?", categoriaDesenvolvimentoid, db);
+//        db.execSQL(INSERT_CATEGORIA_REDES);
+//        db.execSQL(INSERT_CATEGORIA_SEGURANCA_INFORMACAO);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_QUESTAO_OPCAO);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CATEGORIA);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_QUESTAO);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_OPCAO);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_QUESTAO_OPCAO);
-        this.onCreate(db) ;
+
+        this.onCreate(db);
+    }
+
+    private long insertCategoria(String nome, SQLiteDatabase database) {
+        ContentValues values = new ContentValues();
+
+        values.put(CATEGORIA_NOME, nome);
+        long categoriaId = database.insert(TABLE_CATEGORIA, null, values);
+
+        return  categoriaId;
+    }
+
+    private void insertQuestao(String nome, long categoriaId, SQLiteDatabase database) {
+        ContentValues values = new ContentValues();
+
+        values.put(QUESTAO_NOME, nome);
+        values.put(QUESTAO_CATEGORIA_ID, categoriaId);
+         database.insert(TABLE_QUESTAO, null, values);
     }
 
     public List<Categoria> getCategorias() {
@@ -123,9 +148,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return categorias;
     }
 
-    public Categoria getCategoriaById(int id) {
+    public Categoria getCategoriaByNome(String nome) {
         String selectQuery  = "SELECT * FROM " + TABLE_CATEGORIA +
-                " WHERE " + CATEGORIA_ID + " = " + id;
+                " WHERE " + CATEGORIA_NOME + " = " + nome;
         SQLiteDatabase database  = this.getReadableDatabase();
         Cursor cursor = database.rawQuery(selectQuery, null);
 
@@ -133,7 +158,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor.moveToFirst();
         }
 
-        String nome = cursor.getString(cursor.getColumnIndex(CATEGORIA_NOME));
+        int id = cursor.getInt(cursor.getColumnIndex(CATEGORIA_ID));
         Categoria categoria = new Categoria(id, nome);
 
 

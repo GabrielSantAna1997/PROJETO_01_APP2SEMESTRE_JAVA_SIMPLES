@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 11;
+    private static final int DATABASE_VERSION = 12;
     private static final String DATABASE_NAME = "categoria.db";
 
     // Tables names
@@ -91,6 +91,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         long categoriaSegurancaId = this.insertCategoria("Seguranca da Informação", db);
 
         this.insertQuestoes(categoriaDesenvolvimentoid, this.getDesenvolvimentoQuestoes(), db);
+        this.insertQuestoes(categoriaRedesId, this.getRedesQuestoes(), db);
     }
 
     @Override
@@ -109,6 +110,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<QuestaoOpcao> opcoes2 = new ArrayList<QuestaoOpcao>();
         List<QuestaoOpcao> opcoes3 = new ArrayList<QuestaoOpcao>();
         List<QuestaoOpcao> opcoes4 = new ArrayList<QuestaoOpcao>();
+        List<QuestaoOpcao> opcoes5 = new ArrayList<QuestaoOpcao>();
 
         opcoes.add(new QuestaoOpcao(1, 1, 1,"A) uma classe e tem o mesmo nome da classe.", false));
         opcoes.add(new QuestaoOpcao( 1, 1, 2, "B) um objeto e tem o mesmo nome do objeto.", false));
@@ -134,6 +136,54 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         opcoes4.add(new QuestaoOpcao(1, 1, 3, "C) final enum letra {A, B, C}", false));
         opcoes4.add(new QuestaoOpcao(1, 1, 4, "D) Boolean bool = new Boolean()", false));
         questoes.add(new Questao(4, "Dos trechos de códigos abaixo, extraídos de um arquivo fonte escrito para a versão 8 da linguagem Java, o único que compila corretamente é:", opcoes4));
+
+        opcoes5.add(new QuestaoOpcao(1, 1, 1, "A) List.", false));
+        opcoes5.add(new QuestaoOpcao(1, 1, 2, "B) Set.", false));
+        opcoes5.add(new QuestaoOpcao(1, 1, 3, "C) ArrayList.", false));
+        opcoes5.add(new QuestaoOpcao(1, 1, 4, "D) HashMap.", true));
+        questoes.add(new Questao(4, "No Java, é uma interface que não permite elementos duplicados e modela a abstração matemática de conjunto. Contém apenas métodos herdados da interface Collection e adiciona a restrição de que elementos duplicados são proibidos. A interface citada é:", opcoes5));
+
+        return questoes;
+    }
+
+    private List<Questao> getRedesQuestoes() {
+        List<Questao> questoes = new ArrayList<Questao>();
+        List<QuestaoOpcao> opcoes = new ArrayList<QuestaoOpcao>();
+        List<QuestaoOpcao> opcoes2 = new ArrayList<QuestaoOpcao>();
+        List<QuestaoOpcao> opcoes3 = new ArrayList<QuestaoOpcao>();
+        List<QuestaoOpcao> opcoes4 = new ArrayList<QuestaoOpcao>();
+        List<QuestaoOpcao> opcoes5 = new ArrayList<QuestaoOpcao>();
+
+        opcoes.add(new QuestaoOpcao(1, 1, 1,"A) endereço de FTP válido para esse domínio.", false));
+        opcoes.add(new QuestaoOpcao( 1, 1, 2, "B) endereço MAC de rede registrado na máquina cliente.", false));
+        opcoes.add(new QuestaoOpcao(1, 1, 3, "C) porta válida para a intranet desse domínio..", false));
+        opcoes.add(new QuestaoOpcao(1, 1, 4, "D) conta cadastrada e autorizada nesse domínio.", true));
+        questoes.add(new Questao(1, "Para conectar sua estação de trabalho a uma rede local de computadores controlada por um servidor de domínios, o usuário dessa rede deve informar uma senha e um[a]:", opcoes));
+
+
+        opcoes2.add(new QuestaoOpcao(1, 1, 1, "A) 7 camadas.", true));
+        opcoes2.add(new QuestaoOpcao(1, 1, 2, "B) 3 camadas.", false));
+        opcoes2.add(new QuestaoOpcao(1, 1, 3, "C) 12 camadas.", false));
+        opcoes2.add(new QuestaoOpcao(1, 1, 4, "D) 6 camadas.", false));
+        questoes.add(new Questao(2, "Em quantas camadas se divide o modelo de referência OSI?", opcoes2));
+
+        opcoes3.add(new QuestaoOpcao(1, 1, 1, "A) Enquadramento e Empacotamento", true));
+        opcoes3.add(new QuestaoOpcao(1, 1, 2, "B) Encaminhamento e roteamento", false));
+        opcoes3.add(new QuestaoOpcao(1, 1, 3, "C) Segmentação e empacotamento", false));
+        opcoes3.add(new QuestaoOpcao(1, 1, 4, "D) Roteamento e enquadramento", false));
+        questoes.add(new Questao(3, "Quais são as principais funções da camada de rede?", opcoes3));
+
+        opcoes4.add(new QuestaoOpcao(1, 1, 1, "A) Apresentação", false));
+        opcoes4.add(new QuestaoOpcao(1, 1, 2, "B) Sessão", false));
+        opcoes4.add(new QuestaoOpcao(1, 1, 3, "C) Enlace", true));
+        opcoes4.add(new QuestaoOpcao(1, 1, 4, "D) Física", false));
+        questoes.add(new Questao(4, "Qual camada do Modelo OSI é responsável pela correção de erros e fluxo de dados de modo básico?", opcoes4));
+
+        opcoes5.add(new QuestaoOpcao(1, 1, 1, "A) IP E TCP.", false));
+        opcoes5.add(new QuestaoOpcao(1, 1, 2, "B) TCP E UDP.", true));
+        opcoes5.add(new QuestaoOpcao(1, 1, 3, "C) HTTP E SMTP.", false));
+        opcoes5.add(new QuestaoOpcao(1, 1, 4, "D) UDP E POP.", false));
+        questoes.add(new Questao(4, "Quais são os principais protocolos da camada de Transporte?", opcoes5));
 
         return questoes;
     }

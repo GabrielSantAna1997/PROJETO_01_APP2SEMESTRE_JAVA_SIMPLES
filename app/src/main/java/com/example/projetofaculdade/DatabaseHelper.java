@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 12;
+    private static final int DATABASE_VERSION = 14;
     private static final String DATABASE_NAME = "categoria.db";
 
     // Tables names
@@ -92,6 +92,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         this.insertQuestoes(categoriaDesenvolvimentoid, this.getDesenvolvimentoQuestoes(), db);
         this.insertQuestoes(categoriaRedesId, this.getRedesQuestoes(), db);
+        this.insertQuestoes(categoriaSegurancaId, this.getSegurancaQuestoes(), db);
     }
 
     @Override
@@ -104,8 +105,49 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         this.onCreate(db);
     }
 
+    private List<Questao> getSegurancaQuestoes() {
+        List<Questao> questoes = new ArrayList<Questao>();
+        List<QuestaoOpcao> opcoes = new ArrayList<QuestaoOpcao>();
+        List<QuestaoOpcao> opcoes2 = new ArrayList<QuestaoOpcao>();
+        List<QuestaoOpcao> opcoes3 = new ArrayList<QuestaoOpcao>();
+        List<QuestaoOpcao> opcoes4 = new ArrayList<QuestaoOpcao>();
+        List<QuestaoOpcao> opcoes5 = new ArrayList<QuestaoOpcao>();
+
+        opcoes.add(new QuestaoOpcao(1, 1, 1,"A) autenticidade.", true));
+        opcoes.add(new QuestaoOpcao( 1, 1, 2, "B) integridade.", false));
+        opcoes.add(new QuestaoOpcao(1, 1, 3, "C) confidencialidade.", true));
+        opcoes.add(new QuestaoOpcao(1, 1, 4, "D) disponibilidade.", false));
+        questoes.add(new Questao(1, "Para o estabelecimento de padrões de segurança, um dos princípios críticos é a necessidade de se verificar a legitimidade de uma comunicação, de uma transação ou de um acesso a algum serviço. Esse princípio refere-se à", opcoes));
+
+        opcoes2.add(new QuestaoOpcao(1, 1, 1, "A) backdoor.", false));
+        opcoes2.add(new QuestaoOpcao(1, 1, 2, "B) spyware", true));
+        opcoes2.add(new QuestaoOpcao(1, 1, 3, "C) phishing.", false));
+        opcoes2.add(new QuestaoOpcao(1, 1, 4, "D) rootkit.", false));
+        questoes.add(new Questao(2, "Os técnicos precisam ter consciência sobre softwares que têm objetivos de monitorar atividades de uma Instituição e de enviar as informações coletadas para terceiros de forma dissimulada e não autorizada. Estes se enquadram na categoria de software denominada", opcoes2));
+
+        opcoes3.add(new QuestaoOpcao(1, 1, 1, "A) possibilitar a conexão com a Internet.", false));
+        opcoes3.add(new QuestaoOpcao(1, 1, 2, "B) configurar uma rede privada.", false));
+        opcoes3.add(new QuestaoOpcao(1, 1, 3, "C) visualizar diversos tipos de arquivos.", false));
+        opcoes3.add(new QuestaoOpcao(1, 1, 4, "D) realizar a segurança de redes privadas.", true));
+        questoes.add(new Questao(3, "O objetivo do firewall é: ", opcoes3));
+
+        opcoes4.add(new QuestaoOpcao(1, 1, 1, "A) spyware", false));
+        opcoes4.add(new QuestaoOpcao(1, 1, 2, "B) trojan", false));
+        opcoes4.add(new QuestaoOpcao(1, 1, 3, "C) vírus", false));
+        opcoes4.add(new QuestaoOpcao(1, 1, 4, "D) tripod", true));
+        questoes.add(new Questao(4, "Quanto à Segurança da Informação identifique a única alternativa que NÃO é considerada tecnicamente como um malware:", opcoes4));
+
+        opcoes5.add(new QuestaoOpcao(1, 1, 1, "A) IPV4.", true));
+        opcoes5.add(new QuestaoOpcao(1, 1, 2, "B) IPV6.", false));
+        opcoes5.add(new QuestaoOpcao(1, 1, 3, "C) IPV8.", false));
+        opcoes5.add(new QuestaoOpcao(1, 1, 4, "D) IP/NES.", false));
+        questoes.add(new Questao(4, "O esquema de endereçamento de rede mais comum, que consiste de endereços de 32 bits divididos em 4 octetos é chamado", opcoes5));
+
+        return questoes;
+    }
+
     private List<Questao> getDesenvolvimentoQuestoes() {
-         List<Questao> questoes = new ArrayList<Questao>();
+        List<Questao> questoes = new ArrayList<Questao>();
         List<QuestaoOpcao> opcoes = new ArrayList<QuestaoOpcao>();
         List<QuestaoOpcao> opcoes2 = new ArrayList<QuestaoOpcao>();
         List<QuestaoOpcao> opcoes3 = new ArrayList<QuestaoOpcao>();

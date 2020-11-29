@@ -2,6 +2,7 @@ package com.example.projetofaculdade;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.animation.Animator;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -9,6 +10,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -143,14 +145,13 @@ public class QuestionActivity extends AppCompatActivity {
         {
             questNumb++;
             Questao questaoAtual = this.questoes.get(this.questNumb);
-            this.question.setText(questaoAtual.nome);
+            this.atualizarView(this.question, 0, questaoAtual.nome, false);
 
             for (int index = 0; index < questaoAtual.opcoes.size(); index++) {
                 QuestaoOpcao opcaoAtual = questaoAtual.opcoes.get(index);
                 Button btnOpcao  = this.opcoesList.findViewWithTag(opcaoAtual.numero);
-                btnOpcao.setText(opcaoAtual.nome);
                 btnOpcao.setTag(opcaoAtual.numero);
-                btnOpcao.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#1CB5E0")));
+                this.atualizarView(btnOpcao, 0, opcaoAtual.nome, true);
 
             }
 
@@ -167,5 +168,42 @@ public class QuestionActivity extends AppCompatActivity {
             startActivity(intent);
             QuestionActivity.this.finish();
         }
+    }
+
+    private void atualizarView(final View view, final int value, final String text, final boolean isButton) {
+        view.animate().alpha(value).scaleX(value).scaleY(value).setDuration(1000)
+                .setStartDelay(100).setInterpolator(new DecelerateInterpolator())
+                .setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        if (value == 0) {
+
+                            if (isButton) {
+                                ((Button) view).setText(text);
+                                ((Button) view).setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#1CB5E0")));
+                            } else {
+                                ((TextView) view).setText(text);
+                            }
+
+                            atualizarView(view, 1, text, isButton);
+                        }
+
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
     }
 }
